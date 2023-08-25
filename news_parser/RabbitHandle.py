@@ -23,7 +23,7 @@ def ListenInfoHelp(funk,ch, method, properties, body):#функция котор
 class RabbitBase():#класс для взаимодействия с rabbitmq
     def __init__(self,query_name):
         self.name=query_name
-        self.connection=pika.BlockingConnection(pika.ConnectionParameters('172.16.1.3'))
+        self.connection=pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
     def __del__(self):
         self.connection.close()
     def SendInfo(self,info):#принимает словарь, отправляет в очередь

@@ -1,15 +1,15 @@
 import clickhouse_connect
 import openpyxl
-host="172.16.1.2"
+host="clickhouse"
 username="admin"
 password='admin'
-
+database="test"
 
 
 def create_table(table_name,column_names,column_types):
     assert len(column_names)==len(column_types)
     global host,username,password
-    client = clickhouse_connect.get_client(host=host, username=username, password=password)
+    client = clickhouse_connect.get_client(database=database,host=host, username=username, password=password)
     zapros = "CREATE TABLE " + table_name + " ("
     l_names = len(column_names)
     assert l_names == len(column_types)
@@ -25,7 +25,7 @@ def create_table(table_name,column_names,column_types):
 class LinkBase:  # Таблица с ссылками на основные сайты откуда тягаются новости
     def __init__(self):
         self.table_name = "link_base"
-        self.connection = clickhouse_connect.get_client(host=host, username=username, password=password)
+        self.connection = clickhouse_connect.get_client(database=database,host=host, username=username, password=password)
 
     def add_info(self, mas_info):
         client = self.connection
@@ -65,7 +65,7 @@ class LinkBase:  # Таблица с ссылками на основные са
 
 
 def show_table(table_name):
-    client = clickhouse_connect.get_client(host=host, username=username, password=password)
+    client = clickhouse_connect.get_client(database=database,host=host, username=username, password=password)
     ret=client.query("SHOW CREATE TABLE "+table_name)
     print(ret.result_rows)
 
@@ -73,7 +73,7 @@ def show_table(table_name):
 class AlreadyLinks:  # таблица где хранятся уже известные ссылки (для удаления дубликатов)
     def __init__(self):
         self.table_name = "already_parsed_links"
-        self.connection = clickhouse_connect.get_client(host=host, username=username, password=password)
+        self.connection = clickhouse_connect.get_client(database=database,host=host, username=username, password=password)
 
     def GetLinksById(self, id):
         cursor = self.connection
@@ -106,7 +106,7 @@ def RemoveSpesSymvol(text):#минимальная защита от sql инъ�
 class FinishedNews:# таблица обработанных новостей
     def __init__(self):
         self.table_name = "finished_news"
-        self.connection = clickhouse_connect.get_client(host=host, username=username, password=password)
+        self.connection = clickhouse_connect.get_client(database=database,host=host, username=username, password=password)
 
     def AddToBase(self, info, id_main_link):
         client = self.connection
