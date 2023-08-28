@@ -58,4 +58,5 @@ services:
     build: /managment
     depends_on:
       - rabbitmq
+      - clickhouse
 
